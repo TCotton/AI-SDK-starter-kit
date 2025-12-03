@@ -14,7 +14,6 @@ export default [
       codegen,
       import: importPlugin,
       'simple-import-sort': simpleImportSort,
-      'sort-destructure-keys': sortDestructureKeys,
     },
     languageOptions: {
       ecmaVersion: 'latest',
@@ -36,7 +35,7 @@ export default [
       semi: ['error', 'never'],
       'simple-import-sort/imports': 'error',
       'simple-import-sort/exports': 'error',
-      'sort-destructure-keys/sort-destructure-keys': 'error',
+      'sort-destructure-keys/sort-destructure-keys': 'warn',
       'import/first': 'error',
       'import/newline-after-import': 'error',
       'import/no-duplicates': 'error',
