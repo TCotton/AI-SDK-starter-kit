@@ -21,22 +21,12 @@
   },
   {
     "question": "Which chamber receives deoxygenated blood from the body?",
-    "options": [
-      "Left atrium",
-      "Left ventricle",
-      "Right atrium",
-      "Right ventricle"
-    ],
+    "options": ["Left atrium", "Left ventricle", "Right atrium", "Right ventricle"],
     "correctAnswer": "C"
   },
   {
     "question": "Which blood vessels have the thickest muscular walls?",
-    "options": [
-      "Veins",
-      "Arteries",
-      "Capillaries",
-      "Venules"
-    ],
+    "options": ["Veins", "Arteries", "Capillaries", "Venules"],
     "correctAnswer": "B"
   },
   {
@@ -51,52 +41,27 @@
   },
   {
     "question": "Where does gas exchange occur in the lungs?",
-    "options": [
-      "Bronchi",
-      "Trachea",
-      "Alveoli",
-      "Larynx"
-    ],
+    "options": ["Bronchi", "Trachea", "Alveoli", "Larynx"],
     "correctAnswer": "C"
   },
   {
     "question": "Which muscle is the primary driver of inhalation at rest?",
-    "options": [
-      "Internal intercostals",
-      "External obliques",
-      "Diaphragm",
-      "Rectus abdominis"
-    ],
+    "options": ["Internal intercostals", "External obliques", "Diaphragm", "Rectus abdominis"],
     "correctAnswer": "C"
   },
   {
     "question": "What percentage of oxygen is found in inhaled air?",
-    "options": [
-      "21%",
-      "16%",
-      "4%",
-      "78%"
-    ],
+    "options": ["21%", "16%", "4%", "78%"],
     "correctAnswer": "A"
   },
   {
     "question": "Which lung has three lobes?",
-    "options": [
-      "Left",
-      "Right",
-      "Both",
-      "Neither"
-    ],
+    "options": ["Left", "Right", "Both", "Neither"],
     "correctAnswer": "B"
   },
   {
     "question": "Which structure prevents friction around the lungs?",
-    "options": [
-      "Pericardium",
-      "Mediastinum",
-      "Pleura",
-      "Diaphragm"
-    ],
+    "options": ["Pericardium", "Mediastinum", "Pleura", "Diaphragm"],
     "correctAnswer": "C"
   },
   {
@@ -111,52 +76,27 @@
   },
   {
     "question": "The axial skeleton includes:",
-    "options": [
-      "Limbs",
-      "Skull, ribs, spine",
-      "Pelvis and legs",
-      "Shoulder girdle"
-    ],
+    "options": ["Limbs", "Skull, ribs, spine", "Pelvis and legs", "Shoulder girdle"],
     "correctAnswer": "B"
   },
   {
     "question": "The femur is a:",
-    "options": [
-      "Short bone",
-      "Flat bone",
-      "Long bone",
-      "Irregular bone"
-    ],
+    "options": ["Short bone", "Flat bone", "Long bone", "Irregular bone"],
     "correctAnswer": "C"
   },
   {
     "question": "Which bone is sesamoid?",
-    "options": [
-      "Skull",
-      "Radius",
-      "Vertebra",
-      "Patella"
-    ],
+    "options": ["Skull", "Radius", "Vertebra", "Patella"],
     "correctAnswer": "D"
   },
   {
     "question": "What is the shaft of a long bone called?",
-    "options": [
-      "Diaphysis",
-      "Epiphysis",
-      "Periosteum",
-      "Endosteum"
-    ],
+    "options": ["Diaphysis", "Epiphysis", "Periosteum", "Endosteum"],
     "correctAnswer": "A"
   },
   {
     "question": "Which posture deviation is an excessive inward lumbar curve?",
-    "options": [
-      "Kyphosis",
-      "Lordosis",
-      "Scoliosis",
-      "Flat back"
-    ],
+    "options": ["Kyphosis", "Lordosis", "Scoliosis", "Flat back"],
     "correctAnswer": "B"
   },
   {
@@ -171,32 +111,17 @@
   },
   {
     "question": "Bending forward at the waist is:",
-    "options": [
-      "Extension",
-      "Flexion",
-      "Rotation",
-      "Pronation"
-    ],
+    "options": ["Extension", "Flexion", "Rotation", "Pronation"],
     "correctAnswer": "B"
   },
   {
     "question": "Pregnancy commonly increases:",
-    "options": [
-      "Kyphosis",
-      "Scoliosis",
-      "Lumbar lordosis",
-      "Neutral posture"
-    ],
+    "options": ["Kyphosis", "Scoliosis", "Lumbar lordosis", "Neutral posture"],
     "correctAnswer": "C"
   },
   {
     "question": "Lateral flexion means:",
-    "options": [
-      "Twisting",
-      "Bending forward",
-      "Bending to the side",
-      "Straightening the spine"
-    ],
+    "options": ["Twisting", "Bending forward", "Bending to the side", "Straightening the spine"],
     "correctAnswer": "C"
   },
   {
@@ -211,22 +136,12 @@
   },
   {
     "question": "Which joint type is immovable?",
-    "options": [
-      "Fibrous",
-      "Cartilaginous",
-      "Synovial",
-      "Ellipsoid"
-    ],
+    "options": ["Fibrous", "Cartilaginous", "Synovial", "Ellipsoid"],
     "correctAnswer": "A"
   },
   {
     "question": "The elbow is a:",
-    "options": [
-      "Ball-and-socket",
-      "Hinge",
-      "Pivot",
-      "Saddle"
-    ],
+    "options": ["Ball-and-socket", "Hinge", "Pivot", "Saddle"],
     "correctAnswer": "B"
   },
   {
@@ -241,12 +156,7 @@
   },
   {
     "question": "Which synovial joint allows rotation only?",
-    "options": [
-      "Saddle",
-      "Condyloid",
-      "Pivot",
-      "Gliding"
-    ],
+    "options": ["Saddle", "Condyloid", "Pivot", "Gliding"],
     "correctAnswer": "C"
   },
   {
@@ -261,42 +171,22 @@
   },
   {
     "question": "Which muscle is posterior?",
-    "options": [
-      "Pectoralis major",
-      "Quadriceps",
-      "Latissimus dorsi",
-      "Biceps brachii"
-    ],
+    "options": ["Pectoralis major", "Quadriceps", "Latissimus dorsi", "Biceps brachii"],
     "correctAnswer": "C"
   },
   {
     "question": "A muscle that opposes the prime mover is the:",
-    "options": [
-      "Agonist",
-      "Synergist",
-      "Antagonist",
-      "Fixator"
-    ],
+    "options": ["Agonist", "Synergist", "Antagonist", "Fixator"],
     "correctAnswer": "C"
   },
   {
     "question": "A concentric contraction means the muscle:",
-    "options": [
-      "Lengthens",
-      "Does not change length",
-      "Shortens",
-      "Relaxes fully"
-    ],
+    "options": ["Lengthens", "Does not change length", "Shortens", "Relaxes fully"],
     "correctAnswer": "C"
   },
   {
     "question": "Type I fibres are best for:",
-    "options": [
-      "Power",
-      "Explosive strength",
-      "Fast fatigue",
-      "Endurance"
-    ],
+    "options": ["Power", "Explosive strength", "Fast fatigue", "Endurance"],
     "correctAnswer": "D"
   },
   {
@@ -311,142 +201,72 @@
   },
   {
     "question": "Anaerobic glycolysis produces:",
-    "options": [
-      "Oxygen",
-      "ATP only",
-      "Lactic acid",
-      "Phosphocreatine"
-    ],
+    "options": ["Oxygen", "ATP only", "Lactic acid", "Phosphocreatine"],
     "correctAnswer": "C"
   },
   {
     "question": "The aerobic system uses:",
-    "options": [
-      "Only carbs",
-      "Only fats",
-      "Only proteins",
-      "Carbs, fats, and proteins"
-    ],
+    "options": ["Only carbs", "Only fats", "Only proteins", "Carbs, fats, and proteins"],
     "correctAnswer": "D"
   },
   {
     "question": "Low-intensity long-duration exercise uses:",
-    "options": [
-      "ATP-PC",
-      "Glycolysis",
-      "Aerobic system",
-      "Phosphagen shuttle"
-    ],
+    "options": ["ATP-PC", "Glycolysis", "Aerobic system", "Phosphagen shuttle"],
     "correctAnswer": "C"
   },
   {
     "question": "Carbohydrates are stored as:",
-    "options": [
-      "Fatty acids",
-      "Amino acids",
-      "Glycogen",
-      "Lactate"
-    ],
+    "options": ["Fatty acids", "Amino acids", "Glycogen", "Lactate"],
     "correctAnswer": "C"
   },
   {
     "question": "Which blood vessel returns blood to the heart?",
-    "options": [
-      "Artery",
-      "Vein",
-      "Capillary",
-      "Arteriole"
-    ],
+    "options": ["Artery", "Vein", "Capillary", "Arteriole"],
     "correctAnswer": "B"
   },
   {
     "question": "The left ventricle pumps blood to:",
-    "options": [
-      "Lungs",
-      "Liver",
-      "The whole body",
-      "Brain only"
-    ],
+    "options": ["Lungs", "Liver", "The whole body", "Brain only"],
     "correctAnswer": "C"
   },
   {
     "question": "Which part of the spine has an outward curve?",
-    "options": [
-      "Lumbar",
-      "Thoracic",
-      "Cervical",
-      "Sacral"
-    ],
+    "options": ["Lumbar", "Thoracic", "Cervical", "Sacral"],
     "correctAnswer": "B"
   },
   {
     "question": "The pelvis is part of the:",
-    "options": [
-      "Axial skeleton",
-      "Appendicular skeleton",
-      "Cranial skeleton",
-      "Thoracic skeleton"
-    ],
+    "options": ["Axial skeleton", "Appendicular skeleton", "Cranial skeleton", "Thoracic skeleton"],
     "correctAnswer": "B"
   },
   {
     "question": "Which connective tissue surrounds the entire muscle?",
-    "options": [
-      "Endomysium",
-      "Perimysium",
-      "Epimysium",
-      "Sarcolemma"
-    ],
+    "options": ["Endomysium", "Perimysium", "Epimysium", "Sarcolemma"],
     "correctAnswer": "C"
   },
   {
     "question": "Which joint action turns the palm upward?",
-    "options": [
-      "Pronation",
-      "Supination",
-      "Plantarflexion",
-      "Eversion"
-    ],
+    "options": ["Pronation", "Supination", "Plantarflexion", "Eversion"],
     "correctAnswer": "B"
   },
   {
     "question": "Dorsiflexion occurs at the:",
-    "options": [
-      "Knee",
-      "Hip",
-      "Ankle",
-      "Wrist"
-    ],
+    "options": ["Knee", "Hip", "Ankle", "Wrist"],
     "correctAnswer": "C"
   },
   {
     "question": "Which tissue connects bone to bone?",
-    "options": [
-      "Tendon",
-      "Ligament",
-      "Cartilage",
-      "Bursa"
-    ],
+    "options": ["Tendon", "Ligament", "Cartilage", "Bursa"],
     "correctAnswer": "B"
   },
   {
     "question": "Where is smooth muscle found?",
-    "options": [
-      "Biceps",
-      "Intestines",
-      "Heart",
-      "Quadriceps"
-    ],
+    "options": ["Biceps", "Intestines", "Heart", "Quadriceps"],
     "correctAnswer": "B"
   },
   {
     "question": "Which muscle extends the elbow?",
-    "options": [
-      "Biceps",
-      "Deltoid",
-      "Triceps",
-      "Hamstrings"
-    ],
+    "options": ["Biceps", "Deltoid", "Triceps", "Hamstrings"],
     "correctAnswer": "C"
   },
   {
@@ -461,42 +281,22 @@
   },
   {
     "question": "Which gland releases adrenaline?",
-    "options": [
-      "Thyroid",
-      "Adrenal glands",
-      "Pituitary",
-      "Pineal"
-    ],
+    "options": ["Thyroid", "Adrenal glands", "Pituitary", "Pineal"],
     "correctAnswer": "B"
   },
   {
     "question": "What decreases joint range of motion?",
-    "options": [
-      "Warm temperature",
-      "Flexibility training",
-      "Injury or inflammation",
-      "Hydration"
-    ],
+    "options": ["Warm temperature", "Flexibility training", "Injury or inflammation", "Hydration"],
     "correctAnswer": "C"
   },
   {
     "question": "Muscle fibres that fatigue quickly are:",
-    "options": [
-      "Type I",
-      "Type IIa",
-      "Type IIx",
-      "Type III"
-    ],
+    "options": ["Type I", "Type IIa", "Type IIx", "Type III"],
     "correctAnswer": "C"
   },
   {
     "question": "Which system supports very high-intensity efforts such as maximal lifting?",
-    "options": [
-      "Aerobic",
-      "Anaerobic glycolysis",
-      "ATP-PC",
-      "Lactic clearance system"
-    ],
+    "options": ["Aerobic", "Anaerobic glycolysis", "ATP-PC", "Lactic clearance system"],
     "correctAnswer": "C"
   }
 ]
