@@ -149,8 +149,5 @@ playwright/.cache/
 # Drizzle
 drizzle/
 
-# PNPM
-pnpm-lock.yaml
-
 # Turbo
 .turbo/
