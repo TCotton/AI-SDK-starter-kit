@@ -18,7 +18,10 @@ CREATE TABLE questions (
     answer_b        TEXT NOT NULL,
     answer_c        TEXT NOT NULL,
     answer_d        TEXT NOT NULL,
-    correct_answer  TEXT NOT NULL CHECK (correct_answer IN ('A','B','C','D')),
+    correct_answers TEXT[] NOT NULL CHECK (
+        array_length(correct_answers, 1) >= 1
+        AND correct_answers <@ ARRAY['A','B','C','D']
+    ),
     topic           TEXT,
     difficulty      TEXT,
     created_at      TIMESTAMPTZ NOT NULL DEFAULT now()
