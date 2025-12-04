@@ -3,12 +3,14 @@
 ## What's Been Added
 
 ### 1. OpenAPI Specification (`openapi.yaml`)
+
 - **Version**: OpenAPI 3.1.0
 - **Endpoints**: Root, health check, user registration, get user by ID
 - **Schemas**: RegisterUserRequest, RegisterUserResponse, User, Error
 - **Documentation**: Full descriptions, examples, and validation rules
 
 ### 2. Spectral API Linting (`.spectral.yaml`)
+
 - **Rulesets**: Extended from `spectral:oas` and `spectral:asyncapi`
 - **Custom Rules**:
   - Operations must have success responses (2xx)
@@ -20,11 +22,13 @@
   - Parameter descriptions required
 
 ### 3. Fastify Integration
+
 - **@fastify/swagger**: Loads OpenAPI spec
 - **@fastify/swagger-ui**: Interactive documentation at `/docs`
 - **YAML Parser**: Parses `openapi.yaml` at startup
 
 ### 4. NPM Scripts
+
 ```bash
 pnpm run api:lint       # Validate OpenAPI spec
 pnpm run api:lint:json  # JSON output for CI/CD
@@ -32,6 +36,7 @@ pnpm run api:docs       # Show docs URL
 ```
 
 ### 5. Documentation
+
 - **API_FIRST_WORKFLOW.md**: Complete guide to API-first development
 - **Backend README**: Updated with OpenAPI info
 - **Hexagonal Architecture**: Integration guide with DDD layers
@@ -39,6 +44,7 @@ pnpm run api:docs       # Show docs URL
 ## Usage
 
 ### 1. Start Development Server
+
 ```bash
 cd backend
 pnpm dev
@@ -48,6 +54,7 @@ Server starts on: https://localhost:3000 (or http if HTTPS disabled)
 API Docs available at: https://localhost:3000/docs
 
 ### 2. Validate API Design
+
 ```bash
 pnpm run api:lint
 ```
@@ -55,9 +62,11 @@ pnpm run api:lint
 Current validation: ✅ Passing (1 warning about security on public endpoint)
 
 ### 3. View Interactive Documentation
+
 Open browser to: `https://localhost:3000/docs`
 
 Features:
+
 - Browse all endpoints
 - Try API calls interactively
 - View request/response schemas
@@ -77,6 +86,7 @@ Features:
 ## Example: Adding New Endpoint
 
 ### 1. Add to `openapi.yaml`
+
 ```yaml
 paths:
   /workouts:
@@ -99,6 +109,7 @@ paths:
 ```
 
 ### 2. Validate
+
 ```bash
 pnpm run api:lint
 ```
@@ -106,6 +117,7 @@ pnpm run api:lint
 ### 3. Implement Following Hexagonal Architecture
 
 **Domain** (`src/domain/entities/workout.ts`):
+
 ```typescript
 export class Workout {
   constructor(
@@ -117,6 +129,7 @@ export class Workout {
 ```
 
 **Application** (`src/application/dtos/create-workout.dto.ts`):
+
 ```typescript
 export class CreateWorkoutDto {
   constructor(
@@ -127,6 +140,7 @@ export class CreateWorkoutDto {
 ```
 
 **Adapter** (`src/adapters/primary/http/workout.controller.ts`):
+
 ```typescript
 app.post('/workouts', async (request, reply) => {
   const dto = CreateWorkoutDto.validate(request.body)
@@ -142,7 +156,7 @@ app.post('/workouts', async (request, reply) => {
 ✅ **Validation**: Spectral catches API design issues early  
 ✅ **Team Collaboration**: Frontend can start work immediately  
 ✅ **Type Safety**: OpenAPI schemas → TypeScript types (optional)  
-✅ **Testing**: Contract testing against spec  
+✅ **Testing**: Contract testing against spec
 
 ## CI/CD Integration
 

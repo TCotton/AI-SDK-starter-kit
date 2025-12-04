@@ -62,6 +62,7 @@ pnpm run api:lint
 ```
 
 This checks for:
+
 - Missing descriptions
 - Invalid response codes
 - Security issues
@@ -78,6 +79,7 @@ pnpm run dev
 ```
 
 Use the interactive UI to:
+
 - Review API endpoints
 - Test request/response formats
 - Validate schemas
@@ -97,6 +99,7 @@ Now implement the endpoints following the hexagonal architecture:
 ### 5. Keep Spec in Sync
 
 As you implement:
+
 - Update `openapi.yaml` if the design needs to change
 - Run `pnpm run api:lint` before commits
 - Regenerate types if using OpenAPI code generation
@@ -181,7 +184,7 @@ Always define `operationId` for each endpoint:
 paths:
   /users/{id}:
     get:
-      operationId: getUserById  # ← Important for code generation
+      operationId: getUserById # ← Important for code generation
 ```
 
 ### 4. Document Everything
@@ -218,6 +221,7 @@ domain/                    # Core business entities
 ### Example Mapping
 
 **OpenAPI**:
+
 ```yaml
 /users/register:
   post:
@@ -227,6 +231,7 @@ domain/                    # Core business entities
 ```
 
 **Application Layer** (`application/dtos/`):
+
 ```typescript
 export class RegisterUserDto {
   constructor(
@@ -238,6 +243,7 @@ export class RegisterUserDto {
 ```
 
 **Primary Adapter** (`adapters/primary/http/`):
+
 ```typescript
 app.post('/users/register', async (request, reply) => {
   const dto = RegisterUserDto.validate(request.body)
