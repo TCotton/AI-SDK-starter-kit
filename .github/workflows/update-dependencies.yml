@@ -22,7 +22,7 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 10
+          version: 10.24.0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -34,7 +34,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Update minor and patch dependencies
-        run: pnpm update --latest
+        run: pnpm update
 
       - name: Run tests to check for breaking changes
         id: run-tests
@@ -68,7 +68,7 @@ jobs:
             This PR was automatically created to update minor dependencies and security patches.
             
             ## Changes
-            - Updated dependencies using `pnpm update --latest`
+            - Updated dependencies using `pnpm update`
             - Includes minor version updates and security patches
             
             ## Test Results
