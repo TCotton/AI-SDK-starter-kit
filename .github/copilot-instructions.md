@@ -264,6 +264,7 @@ Client configured in `frontend/src/db/index.ts` using `import.meta.env.DATABASE_
 
 **Frontend uses Next.js `process.env` pattern:**
 
+- Public vars: `NEXT_PUBLIC_*` (exposed to browser)
 - Private vars: `DATABASE_URL`, `GOOGLE_API_KEY`, `DB_HOST`, etc. (server-only)
 - Example file: `frontend/.env.example` - copy to `.env.local` before development
 

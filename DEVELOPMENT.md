@@ -222,7 +222,7 @@ The development server supports hot module replacement (HMR). Changes to files w
 If port 4321 is already in use, you can change it in `frontend/next.config.ts` or set the PORT environment variable:
 
 ```bash
-PORT=3000 pnpm dev
+PORT=4322 pnpm dev
 ```
 
 ### TypeScript Errors
