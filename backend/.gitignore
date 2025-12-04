@@ -6,3 +6,10 @@ build/
 
 # SSL certificates
 certs/
+
+# PostgreSQL data (if running locally without Docker)
+postgres_data/
+wal_archive/
+
+# PostgreSQL logs (if mounted)
+postgres-config/log/
