@@ -1,6 +1,44 @@
+import 'dotenv/config'
+import type { FastifyServerOptions } from 'fastify'
 import { buildApp } from './app.js'
+import { readFileSync } from 'fs'
+import { join } from 'path'
+import { fileURLToPath } from 'url'
+import { dirname } from 'path'
 
-const fastify = buildApp()
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+
+// HTTPS configuration for development
+const isDevelopment = process.env.NODE_ENV !== 'production'
+const useHttps = isDevelopment && process.env.USE_HTTPS === 'true'
+
+let httpsOptions: FastifyServerOptions | undefined
+if (useHttps) {
+  try {
+    // Determine certs path - works for both dev (tsx) and production (compiled)
+    const isCompiledDist = __dirname.includes('/dist/')
+    const certsPath = isCompiledDist
+      ? join(__dirname, '..', 'certs') // When running from dist/
+      : join(__dirname, '..', 'certs') // When running from src/ - go up one level to backend/certs
+
+    httpsOptions = {
+      https: {
+        key: readFileSync(join(certsPath, 'key.pem')),
+        cert: readFileSync(join(certsPath, 'cert.pem')),
+      },
+    } as FastifyServerOptions
+    console.log('🔒 HTTPS enabled for development')
+  } catch (error) {
+    console.warn('⚠️  HTTPS certificates not found, falling back to HTTP')
+    console.warn(`   Looked in: ${join(__dirname, '..', 'certs')}`)
+    console.warn(
+      '   Run: cd backend/certs && openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes -subj "/C=US/ST=State/L=City/O=Organization/CN=localhost"'
+    )
+  }
+}
+
+const fastify = buildApp(httpsOptions)
 
 // Start server
 const start = async () => {
@@ -9,7 +47,8 @@ const start = async () => {
     const host = process.env.HOST || '0.0.0.0'
 
     await fastify.listen({ port, host })
-    console.log(`Server listening on http://${host}:${port}`)
+    const protocol = useHttps ? 'https' : 'http'
+    console.log(`Server listening on ${protocol}://${host}:${port}`)
   } catch (err) {
     fastify.log.error(err)
     process.exit(1)
