@@ -89,7 +89,7 @@ export class ValidationUtil {
    * - Separated by hyphens
    *
    * Accepts both lowercase and uppercase hexadecimal characters.
-   * Works with UUID versions 1-5.
+   * Works with UUID versions.
    *
    * @param value - The string to validate as a UUID
    * @returns True if the string is a valid UUID format, false otherwise
