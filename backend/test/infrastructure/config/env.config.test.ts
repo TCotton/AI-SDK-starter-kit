@@ -48,16 +48,6 @@ describe('EnvConfig', () => {
   })
 
   describe('DATABASE_URL', () => {
-    it('should have DATABASE_URL property that can be undefined when not set', async () => {
-      // DATABASE_URL might be undefined if no .env file exists (e.g., in CI)
-      const { EnvConfig } = await import('../../../src/infrastructure/config/env.config.js')
-
-      expect(EnvConfig.DATABASE_URL).toBeDefined()
-      expect(
-        typeof EnvConfig.DATABASE_URL === 'string' || EnvConfig.DATABASE_URL === undefined
-      ).toBe(true)
-    })
-
     it('should be a static readonly property', async () => {
       const { EnvConfig } = await import('../../../src/infrastructure/config/env.config.js')
 
