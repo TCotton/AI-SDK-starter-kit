@@ -1,4 +1,4 @@
-import { beforeEach,describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 
 import { User } from '../../../src/domain/entities/user.js'
 import { Email } from '../../../src/domain/value-objects/email.js'
