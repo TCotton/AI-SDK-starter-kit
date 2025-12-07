@@ -20,6 +20,10 @@
       "dependsOn": ["^build", "^test:unit"],
       "outputs": ["coverage/**"]
     },
+    "test:unit:coverage": {
+      "dependsOn": ["^build", "^test:unit:coverage"],
+      "outputs": ["coverage/**"]
+    },
     "test:e2e": {
       "cache": false,
       "dependsOn": ["^build", "^test:e2e"]
