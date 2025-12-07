@@ -12,6 +12,8 @@ import { Message } from '@/view/components/MessageComponent.js'
 import { MessageIntroComponent } from '@/view/components/MessageIntroComponent.js'
 import { Wrapper } from '@/view/components/WrapperComponent.js'
 
+import { fileToDataURL } from '../../application/services/fileToDataURL.js'
+
 export default function AIChatPage() {
   const { messages, sendMessage } = useChat({
     transport: new DefaultChatTransport({
@@ -22,6 +24,7 @@ export default function AIChatPage() {
 
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   const scrollToBottom = () => {
@@ -35,15 +38,33 @@ export default function AIChatPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!input.trim() || isLoading) return
-    /* console.log('Sending message:', userMessage)*/
-    sendMessage({
-      text: input,
-    })
-    /*    console.log('messages', messages)
-    console.log('Sent message:', userMessage)
-    console.log('Status:', status)*/
+
+    const parts: Array<
+      { type: 'text'; text: string } | { type: 'file'; mediaType: string; url: string }
+    > = [
+      {
+        type: 'text',
+        text: input,
+      },
+    ]
+
+    if (selectedFile) {
+      parts.push({
+        type: 'file',
+        mediaType: selectedFile.type,
+        url: await fileToDataURL(selectedFile),
+      })
+    }
+
+    sendMessage({ parts })
+
     setInput('')
+    setSelectedFile(null)
     setIsLoading(false)
+  }
+
+  const handleFileSelect = (file: File | null) => {
+    setSelectedFile(file)
   }
 
   return (
@@ -130,6 +151,9 @@ export default function AIChatPage() {
           onChange={(e) => setInput(e.target.value)}
           onSubmit={handleSubmit}
           isLoading={isLoading}
+          enableFileUpload={true}
+          onFileSelect={handleFileSelect}
+          selectedFile={selectedFile}
         />
       </Paper>
     </Wrapper>
