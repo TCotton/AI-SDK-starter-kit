@@ -2,7 +2,7 @@
 import { useChat } from '@ai-sdk/react'
 import PersonIcon from '@mui/icons-material/Person'
 import SmartToyIcon from '@mui/icons-material/SmartToy'
-import { Avatar, Box, CircularProgress, Paper, Stack } from '@mui/material'
+import { Alert, Avatar, Box, CircularProgress, Paper, Snackbar, Stack } from '@mui/material'
 import { DefaultChatTransport } from 'ai'
 import React, { useEffect, useRef, useState } from 'react'
 
@@ -24,6 +24,7 @@ export default function AIChatPage() {
   const [input, setInput] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [errorMessage, setErrorMessage] = useState<string>('')
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   const scrollToBottom = () => {
@@ -72,7 +73,7 @@ export default function AIChatPage() {
       const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
       if (file.size > MAX_FILE_SIZE) {
         // Show error to user
-        console.error('File too large. Maximum size is 10MB')
+        setErrorMessage('File too large. Maximum size is 10MB')
         return
       }
     }
@@ -168,6 +169,16 @@ export default function AIChatPage() {
           selectedFile={selectedFile}
         />
       </Paper>
+      <Snackbar
+        open={!!errorMessage}
+        autoHideDuration={6000}
+        onClose={() => setErrorMessage('')}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert onClose={() => setErrorMessage('')} severity="error" sx={{ width: '100%' }}>
+          {errorMessage}
+        </Alert>
+      </Snackbar>
     </Wrapper>
   )
 }
