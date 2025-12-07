@@ -68,6 +68,14 @@ export default function AIChatPage() {
   }
 
   const handleFileSelect = (file: File | null) => {
+    if (file) {
+      const MAX_FILE_SIZE = 10 * 1024 * 1024 // 10MB
+      if (file.size > MAX_FILE_SIZE) {
+        // Show error to user
+        console.error('File too large. Maximum size is 10MB')
+        return
+      }
+    }
     setSelectedFile(file)
   }
 
