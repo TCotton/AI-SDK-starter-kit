@@ -74,11 +74,11 @@ class TokeniseOpenAI {
       if (baseDir) {
         const resolvedBaseDir = path.resolve(baseDir)
 
-        // Ensure the resolved path starts with the base directory
-        if (
-          !resolvedPath.startsWith(resolvedBaseDir + path.sep) &&
-          resolvedPath !== resolvedBaseDir
-        ) {
+        // Use path.relative to check for path traversal
+        const relativePath = path.relative(resolvedBaseDir, resolvedPath)
+
+        // If the relative path starts with '..' or is absolute, the file is outside baseDir
+        if (relativePath.startsWith('..') || path.isAbsolute(relativePath)) {
           throw new Error(
             `File path "${filePath}" is outside the allowed base directory "${baseDir}"`
           )
