@@ -17,7 +17,10 @@
       "dependsOn": ["^lint:fix"]
     },
     "test:unit": {
-      "dependsOn": ["^build", "^test:unit"],
+      "dependsOn": ["^build", "^test:unit"]
+    },
+    "test:unit:coverage": {
+      "dependsOn": ["^build", "^test:unit:coverage"],
       "outputs": ["coverage/**"]
     },
     "test:e2e": {
