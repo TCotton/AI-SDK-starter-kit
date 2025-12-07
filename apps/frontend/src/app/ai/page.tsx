@@ -6,13 +6,12 @@ import { Avatar, Box, CircularProgress, Paper, Stack } from '@mui/material'
 import { DefaultChatTransport } from 'ai'
 import React, { useEffect, useRef, useState } from 'react'
 
+import { fileToDataURL } from '@/application/services/fileToDataURL.js'
 import { ChatInput } from '@/view/components/ChatInputComponent.js'
 import { IntroComponent } from '@/view/components/IntroComponent.js'
 import { Message } from '@/view/components/MessageComponent.js'
 import { MessageIntroComponent } from '@/view/components/MessageIntroComponent.js'
 import { Wrapper } from '@/view/components/WrapperComponent.js'
-
-import { fileToDataURL } from '../../application/services/fileToDataURL.js'
 
 export default function AIChatPage() {
   const { messages, sendMessage } = useChat({
