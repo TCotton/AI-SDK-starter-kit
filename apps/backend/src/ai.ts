@@ -23,6 +23,13 @@ export const POST = async (req: Request): Promise<Response> => {
     system: SYSTEM_PROMPT,
   })
 
+  for await (const chunk of streamTextResult.textStream) {
+    process.stdout.write(chunk)
+  }
+
+  console.log() // Empty log to separate the output from the usage
+  console.log(await streamTextResult.usage)
+
   const stream = streamTextResult.toUIMessageStream()
 
   return createUIMessageStreamResponse({
