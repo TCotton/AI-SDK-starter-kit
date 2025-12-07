@@ -81,7 +81,7 @@ export class FileUtil {
         path: FileUtil.getRelativePath(fullPath),
       }
     } catch (error) {
-      this.handleError(error, 'writing file')
+      FileUtil.handleError(error, 'writing file')
     }
   }
 
@@ -115,7 +115,7 @@ export class FileUtil {
         path: FileUtil.getRelativePath(fullPath),
       }
     } catch (error) {
-      this.handleError(error, 'reading file')
+      FileUtil.handleError(error, 'reading file')
     }
   }
 
@@ -163,7 +163,7 @@ export class FileUtil {
         }
       }
     } catch (error) {
-      this.handleError(error, 'deleting path')
+      FileUtil.handleError(error, 'deleting path')
     }
   }
 
@@ -218,7 +218,7 @@ export class FileUtil {
         path: FileUtil.getRelativePath(fullPath),
       }
     } catch (error) {
-      this.handleError(error, 'listing directory')
+      FileUtil.handleError(error, 'listing directory')
     }
   }
 
@@ -250,7 +250,7 @@ export class FileUtil {
         path: FileUtil.getRelativePath(fullPath),
       }
     } catch (error) {
-      this.handleError(error, 'creating directory')
+      FileUtil.handleError(error, 'creating directory')
     }
   }
 
@@ -276,7 +276,7 @@ export class FileUtil {
         path: FileUtil.getRelativePath(fullPath),
       }
     } catch (error) {
-      this.handleError(error, 'checking path existence')
+      FileUtil.handleError(error, 'checking path existence')
     }
   }
 
@@ -351,7 +351,7 @@ export class FileUtil {
         searchDir: FileUtil.getRelativePath(fullSearchDir),
       }
     } catch (error) {
-      this.handleError(error, 'searching files')
+      FileUtil.handleError(error, 'searching files')
     }
   }
 }
