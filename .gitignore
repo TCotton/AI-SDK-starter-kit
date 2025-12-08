@@ -169,9 +169,6 @@ test-results/
 playwright-report/
 playwright/.cache/
 
-# Drizzle
-drizzle/
-
 # Turbo
 .turbo/
 

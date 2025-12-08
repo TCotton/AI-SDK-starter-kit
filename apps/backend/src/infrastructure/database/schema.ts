@@ -10,7 +10,15 @@ import {
   inet,
   index,
   check,
+  customType,
 } from 'drizzle-orm/pg-core'
+
+// Define CITEXT custom type for case-insensitive text
+const citext = customType<{ data: string }>({
+  dataType() {
+    return 'citext'
+  },
+})
 
 /**
  * User table: Stores user account information
@@ -23,7 +31,7 @@ export const user = pgTable(
       .default(sql`uuidv7()`),
     name: text('name').notNull(),
     password: text('password').notNull(),
-    email: text('email').notNull().unique(),
+    email: citext('email').notNull().unique(),
     createdAt: timestamp('created_at', { withTimezone: true })
       .notNull()
       .default(sql`now()`),
