@@ -18,7 +18,7 @@
 export class DatabaseUtil {
   /**
    * PostgreSQL error code for unique constraint violations.
-   * Code 23505: unique_violation
+   * Code 23505: UNIQUE VIOLATION
    * @see https://www.postgresql.org/docs/current/errcodes-appendix.html
    */
   private static readonly PG_UNIQUE_VIOLATION = '23505'
