@@ -12,22 +12,23 @@ import {
   Typography,
 } from '@mui/material'
 import { useRouter } from 'next/navigation.js'
+import React from 'react'
 
 interface SignInFormProps {
-  formData: {
-    email: string
-    password: string
+  readonly formData: {
+    readonly email: string
+    readonly password: string
   }
-  errors: {
-    email: string
-    password: string
+  readonly errors: {
+    readonly email: string
+    readonly password: string
   }
-  onFieldChange: (
+  readonly onFieldChange: (
     field: 'email' | 'password'
   ) => (event: React.ChangeEvent<HTMLInputElement>) => void
-  onSubmit: (event: React.FormEvent) => void
-  onGoogleSignIn: () => void
-  onGitHubSignIn: () => void
+  readonly onSubmit: (event: React.FormEvent) => void
+  readonly onGoogleSignIn: () => void
+  readonly onGitHubSignIn: () => void
 }
 
 export function SignInForm({

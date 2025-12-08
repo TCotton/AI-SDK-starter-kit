@@ -12,26 +12,27 @@ import {
   Typography,
 } from '@mui/material'
 import { useRouter } from 'next/navigation.js'
+import React from 'react'
 
 interface RegistrationFormProps {
-  formData: {
-    email: string
-    name: string
-    password: string
-    confirmPassword: string
+  readonly formData: {
+    readonly email: string
+    readonly name: string
+    readonly password: string
+    readonly confirmPassword: string
   }
-  errors: {
-    email: string
-    name: string
-    password: string
-    confirmPassword: string
+  readonly errors: {
+    readonly email: string
+    readonly name: string
+    readonly password: string
+    readonly confirmPassword: string
   }
-  onFieldChange: (
+  readonly onFieldChange: (
     field: 'email' | 'name' | 'password' | 'confirmPassword'
   ) => (event: React.ChangeEvent<HTMLInputElement>) => void
-  onSubmit: (event: React.FormEvent) => void
-  onGoogleSignUp: () => void
-  onGitHubSignUp: () => void
+  readonly onSubmit: (event: React.FormEvent) => void
+  readonly onGoogleSignUp: () => void
+  readonly onGitHubSignUp: () => void
 }
 
 export function RegistrationForm({
