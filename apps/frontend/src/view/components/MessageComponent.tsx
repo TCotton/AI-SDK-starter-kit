@@ -8,6 +8,17 @@ interface ToolInput {
   content?: string
 }
 
+function isToolInput(input: unknown): input is ToolInput {
+  if (typeof input !== 'object' || input === null) return false
+
+  // Validate that properties (if present) have the correct types
+  const hasValidPath = !('path' in input) || typeof input.path === 'string'
+  const hasValidPattern = !('pattern' in input) || typeof input.pattern === 'string'
+  const hasValidContent = !('content' in input) || typeof input.content === 'string'
+
+  return hasValidPath && hasValidPattern && hasValidContent
+}
+
 interface ToolConfig {
   emoji: string
   label: string
@@ -92,7 +103,12 @@ const renderToolPart = (part: UIMessagePart<UIDataTypes, UITools>, index: number
   const config = TOOL_CONFIGS[part.type]
   if (!config) return null
 
-  const input = part.input as ToolInput
+  // Check if part has input property (not all UIMessagePart types have it)
+  if (!('input' in part)) return null
+
+  if (!isToolInput(part.input)) return null
+
+  const input = part.input
   const displayValue =
     config.displayField === 'path' ? input.path || 'Unknown' : input.pattern || 'Unknown'
 
