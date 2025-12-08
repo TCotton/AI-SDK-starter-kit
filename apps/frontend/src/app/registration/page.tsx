@@ -4,6 +4,8 @@ import { GitHub as GitHubIcon, Google as GoogleIcon } from '@mui/icons-material'
 import { Box, Button, Container, Divider, Paper, TextField, Typography } from '@mui/material'
 import { useState } from 'react'
 
+import { EmailSchema, PasswordSchema} from '@/domain/auth/index.js'
+
 export default function RegistrationPage() {
   const [formData, setFormData] = useState({
     email: '',
@@ -35,8 +37,11 @@ export default function RegistrationPage() {
     // Email validation
     if (!formData.email) {
       newErrors.email = 'Email is required'
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email address'
+    } else {
+      const result = EmailSchema.safeParse(formData.email)
+      if (!result.success) {
+        newErrors.email = 'Please enter a valid email address'
+      }
     }
 
     // Name validation
@@ -47,15 +52,21 @@ export default function RegistrationPage() {
     // Password validation
     if (!formData.password) {
       newErrors.password = 'Password is required'
-    } else if (formData.password.length < 8) {
-      newErrors.password = 'Password must be at least 8 characters'
+    } else {
+      const result = PasswordSchema.safeParse(formData.password)
+      if (!result.success) {
+        newErrors.password = 'Password must be at least 12 characters'
+      }
     }
 
     // Confirm password validation
     if (!formData.confirmPassword) {
       newErrors.confirmPassword = 'Please confirm your password'
-    } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match'
+    } else {
+      const result = PasswordSchema.safeParse(formData.confirmPassword)
+      if (!result.success) {
+        newErrors.confirmPassword = 'Password must be at least 12 characters'
+      }
     }
 
     setErrors(newErrors)

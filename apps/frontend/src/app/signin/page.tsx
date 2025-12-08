@@ -11,9 +11,13 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
+import { useRouter } from 'next/navigation.js'
 import { useState } from 'react'
 
+import { EmailSchema } from '@/domain/auth/index.js'
+
 export default function SignInPage() {
+  const router = useRouter()
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -38,8 +42,11 @@ export default function SignInPage() {
     // Email validation
     if (!formData.email) {
       newErrors.email = 'Email is required'
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email address'
+    } else {
+      const result = EmailSchema.safeParse(formData.email)
+      if (!result.success) {
+        newErrors.email = 'Please enter a valid email address'
+      }
     }
 
     // Password validation
@@ -163,12 +170,14 @@ export default function SignInPage() {
 
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 3 }}>
               <MuiLink
-                href="/forgot-password"
+                component="button"
                 variant="body2"
+                onClick={() => router.push('/forgot-password')}
                 sx={{
                   color: 'primary.main',
                   textDecoration: 'none',
                   fontWeight: 500,
+                  cursor: 'pointer',
                   '&:hover': {
                     textDecoration: 'underline',
                   },
@@ -198,12 +207,14 @@ export default function SignInPage() {
             <Typography variant="body2" color="text.secondary">
               Don&apos;t have an account?{' '}
               <MuiLink
-                href="/registration"
+                component="button"
                 variant="body2"
+                onClick={() => router.push('/registration')}
                 sx={{
                   color: 'primary.main',
                   textDecoration: 'none',
                   fontWeight: 500,
+                  cursor: 'pointer',
                   '&:hover': {
                     textDecoration: 'underline',
                   },
