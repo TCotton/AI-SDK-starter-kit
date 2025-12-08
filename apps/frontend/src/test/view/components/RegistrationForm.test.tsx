@@ -79,7 +79,7 @@ describe('RegistrationForm', () => {
       render(<RegistrationForm {...defaultProps} />)
 
       expect(
-        screen.getByText(/by creating an account, you agree to our terms of service/i)
+        screen.getByText(/by creating an account, you agree to our terms of service and privacy policy/i)
       ).toBeInTheDocument()
     })
 
@@ -569,6 +569,36 @@ describe('RegistrationForm', () => {
       fireEvent.submit(form!)
 
       expect(mockOnSubmit).toHaveBeenCalledTimes(3)
+    })
+    it('should have form with noValidate attribute', () => {
+      render(<RegistrationForm {...defaultProps} />)
+
+      const form = screen.getByRole('button', { name: /create account/i }).closest('form')
+      expect(form).toHaveAttribute('novalidate')
+    })
+    it('should handle long email addresses', () => {
+      const longEmail = 'very.long.email.address.with.many.dots@example.com'
+      const props = {
+        ...defaultProps,
+        formData: { ...defaultProps.formData, email: longEmail },
+      }
+      render(<RegistrationForm {...props} />)
+
+      const emailInput = screen.getByLabelText(/email address/i) as HTMLInputElement
+      expect(emailInput.value).toBe(longEmail)
+    })
+
+    it('should handle special characters in password', () => {
+      const specialPassword = '!@#$%^&*()_+-=[]{}|;:,.<>?'
+      const props = {
+        ...defaultProps,
+        formData: { ...defaultProps.formData, password: specialPassword },
+      }
+      render(<RegistrationForm {...props} />)
+
+      const passwordInputs = screen.getAllByLabelText(/password/i)
+      const passwordInput = passwordInputs[0] as HTMLInputElement
+      expect(passwordInput.value).toBe(specialPassword)
     })
   })
 })
