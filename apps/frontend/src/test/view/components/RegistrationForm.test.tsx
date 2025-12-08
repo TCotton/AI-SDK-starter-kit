@@ -79,7 +79,9 @@ describe('RegistrationForm', () => {
       render(<RegistrationForm {...defaultProps} />)
 
       expect(
-        screen.getByText(/by creating an account, you agree to our terms of service and privacy policy/i)
+        screen.getByText(
+          /by creating an account, you agree to our terms of service and privacy policy/i
+        )
       ).toBeInTheDocument()
     })
 
