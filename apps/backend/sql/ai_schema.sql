@@ -21,9 +21,9 @@ CREATE INDEX chats_user_id_updated_at_idx ON chats(user_id, updated_at DESC);
 
 -- Messages table: Stores individual messages within chats
 CREATE TABLE messages (
-    id UUID PRIMARY KEY,
+    id UUID PRIMARY KEY DEFAULT uuidv7(),
     chat_id UUID NOT NULL REFERENCES chats(id) ON DELETE CASCADE,
-    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    created_at TIMESTAMP NOT NULL DEFAULT now(),
     role VARCHAR NOT NULL CONSTRAINT namechk CHECK (char_length(name) <= 15)
 );
 
@@ -33,10 +33,10 @@ CREATE INDEX messages_chat_id_created_at_idx ON messages(chat_id, created_at);
 
 -- Parts table: Stores message parts (text, files, tools, etc.)
 CREATE TABLE parts (
-    id UUID PRIMARY KEY,
+    id UUID PRIMARY KEY DEFAULT uuidv7(),
     message_id VARCHAR NOT NULL REFERENCES messages(id) ON DELETE CASCADE,
     type VARCHAR NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     "order" INTEGER NOT NULL DEFAULT 0,
 
     -- Text fields
