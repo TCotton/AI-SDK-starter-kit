@@ -100,28 +100,87 @@ pnpm prettier --check "**/*.{js,jsx,ts,tsx,json,md}"
 cd frontend && pnpm check
 ```
 
-## Database (Drizzle)
+## Database (Drizzle ORM)
 
-### Generate Migrations
+The project uses Drizzle ORM with PostgreSQL for database management. The schema is defined in `apps/backend/src/infrastructure/database/schema.ts` and migrations are version-controlled in `apps/backend/drizzle/`.
 
-```bash
-cd frontend
-pnpm drizzle-kit generate:pg
-```
+### Development Workflow
 
-### Run Migrations
+For rapid development and prototyping:
 
 ```bash
-cd frontend
-pnpm drizzle-kit push:pg
+cd apps/backend
+
+# Generate migration from schema changes
+pnpm db:generate
+
+# Push schema directly to database (development only)
+pnpm db:push
+
+# Drop all tables and recreate (development only)
+pnpm db:reset
+
+# Open Drizzle Studio GUI to view/edit data
+pnpm db:studio
 ```
+
+### Production Workflow
+
+For production deployments, use versioned migrations:
+
+```bash
+cd apps/backend
+
+# 1. Generate migration from schema changes
+pnpm db:generate
+
+# 2. Review generated SQL in drizzle/ folder
+
+# 3. Commit migration files to version control
+git add drizzle/
+git commit -m "feat: add new schema migration"
+
+# 4. Apply migrations to production database
+pnpm db:migrate
+```
+
+### Migration Files
+
+Migration files are stored in `apps/backend/drizzle/` and **are version-controlled** to ensure:
+
+- Consistent schema across all environments
+- Traceable database evolution history
+- Safe production deployments
+- Team synchronization
+
+**Important:** Never modify migration files after they've been applied. Always generate new migrations for schema changes.
+
+### Database Reset (Development Only)
+
+To completely reset your development database:
+
+```bash
+cd apps/backend
+
+# Drop all tables
+pnpm db:drop
+
+# Or drop and recreate in one command
+pnpm db:reset
+```
+
+**Warning:** `db:drop` and `db:reset` are destructive operations. Never use in production!
 
 ### Drizzle Studio (Database GUI)
 
+View and edit your database using Drizzle Studio:
+
 ```bash
-cd frontend
-pnpm drizzle-kit studio
+cd apps/backend
+pnpm db:studio
 ```
+
+This opens a web interface to browse tables, run queries, and modify data.
 
 ## AI SDK (@ai-sdk/google)
 
