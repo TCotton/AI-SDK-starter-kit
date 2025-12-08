@@ -8,6 +8,10 @@ interface ToolInput {
   content?: string
 }
 
+function isToolInput(input: unknown): input is ToolInput {
+  return typeof input === 'object' && input !== null
+}
+
 interface ToolConfig {
   emoji: string
   label: string
@@ -92,7 +96,12 @@ const renderToolPart = (part: UIMessagePart<UIDataTypes, UITools>, index: number
   const config = TOOL_CONFIGS[part.type]
   if (!config) return null
 
-  const input = part.input as ToolInput
+  // Check if part has input property (not all UIMessagePart types have it)
+  if (!('input' in part)) return null
+
+  if (!isToolInput(part.input)) return null
+
+  const input = part.input
   const displayValue =
     config.displayField === 'path' ? input.path || 'Unknown' : input.pattern || 'Unknown'
 
