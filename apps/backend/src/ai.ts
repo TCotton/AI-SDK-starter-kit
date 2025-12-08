@@ -11,10 +11,26 @@ import {
 import { z } from 'zod'
 import { fileSystemTools } from './shared/utils/file.util.js'
 
+export const GET = async (req: Request): Promise<Response> => {
+  const url = new URL(req.url)
+  const chatId = url.searchParams.get('id')
+  if (!chatId) {
+    return new Response('No chatId provided', { status: 400 })
+  }
+  const chat = { id: chatId, messages: [] as UIMessage[] }
+
+  return new Response(JSON.stringify(chat), {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+}
+
 export const POST = async (req: Request): Promise<Response> => {
-  const body = (await req.json()) as { messages: UIMessage[] }
+  const body = (await req.json()) as { messages: UIMessage[]; id: string }
 
   const messages: UIMessage[] = body.messages
+  const id = body.id
 
   const modelMessages: ModelMessage[] = convertToModelMessages(messages)
 
