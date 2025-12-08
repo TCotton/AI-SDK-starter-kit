@@ -16,6 +16,18 @@ vi.mock('pino', () => ({
 describe('PinoLoggerService', () => {
   let originalEnv: typeof process.env
 
+  // Helper function to create a logger service instance
+  async function createLoggerService(logLevel?: string) {
+    process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test'
+    if (logLevel !== undefined) {
+      process.env.LOG_LEVEL = logLevel
+    }
+    const { PinoLoggerService } = await import(
+      '../../../../src/adapters/secondary/services/logger.service.js'
+    )
+    return new PinoLoggerService()
+  }
+
   beforeEach(() => {
     // Save original environment
     originalEnv = { ...process.env }
@@ -60,14 +72,8 @@ describe('PinoLoggerService', () => {
     })
 
     it('should initialize pino logger with custom log level from environment', async () => {
-      process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test'
-      process.env.LOG_LEVEL = 'debug'
-
       const pino = (await import('pino')).default
-      const { PinoLoggerService } =
-        await import('../../../../src/adapters/secondary/services/logger.service.js')
-
-      new PinoLoggerService()
+      await createLoggerService('debug')
 
       expect(pino).toHaveBeenCalledWith({
         level: 'debug',
@@ -81,13 +87,8 @@ describe('PinoLoggerService', () => {
     })
 
     it('should initialize pino logger with pino-pretty transport', async () => {
-      process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test'
-
       const pino = (await import('pino')).default
-      const { PinoLoggerService } =
-        await import('../../../../src/adapters/secondary/services/logger.service.js')
-
-      new PinoLoggerService()
+      await createLoggerService()
 
       // @ts-ignore
       const call = vi.mocked(pino).mock.calls[0][0] || { transport: null }
@@ -102,12 +103,7 @@ describe('PinoLoggerService', () => {
 
   describe('LoggerPort interface implementation', () => {
     it('should implement LoggerPort interface', async () => {
-      process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test'
-
-      const { PinoLoggerService } =
-        await import('../../../../src/adapters/secondary/services/logger.service.js')
-
-      const loggerService = new PinoLoggerService()
+      const loggerService = await createLoggerService()
 
       // Verify all required methods exist
       expect(typeof loggerService.info).toBe('function')
@@ -119,12 +115,7 @@ describe('PinoLoggerService', () => {
 
   describe('info()', () => {
     it('should call pino info with message only', async () => {
-      process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test'
-
-      const { PinoLoggerService } =
-        await import('../../../../src/adapters/secondary/services/logger.service.js')
-
-      const loggerService = new PinoLoggerService()
+      const loggerService = await createLoggerService()
       loggerService.info('Test info message')
 
       expect(mockPinoLogger.info).toHaveBeenCalledWith(undefined, 'Test info message')
@@ -132,12 +123,7 @@ describe('PinoLoggerService', () => {
     })
 
     it('should call pino info with message and context', async () => {
-      process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test'
-
-      const { PinoLoggerService } =
-        await import('../../../../src/adapters/secondary/services/logger.service.js')
-
-      const loggerService = new PinoLoggerService()
+      const loggerService = await createLoggerService()
       const context = { userId: '123', action: 'login' }
       loggerService.info('User logged in', context)
 
@@ -146,24 +132,14 @@ describe('PinoLoggerService', () => {
     })
 
     it('should call pino info with empty context object', async () => {
-      process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test'
-
-      const { PinoLoggerService } =
-        await import('../../../../src/adapters/secondary/services/logger.service.js')
-
-      const loggerService = new PinoLoggerService()
+      const loggerService = await createLoggerService()
       loggerService.info('Test message', {})
 
       expect(mockPinoLogger.info).toHaveBeenCalledWith({}, 'Test message')
     })
 
     it('should handle complex context objects', async () => {
-      process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test'
-
-      const { PinoLoggerService } =
-        await import('../../../../src/adapters/secondary/services/logger.service.js')
-
-      const loggerService = new PinoLoggerService()
+      const loggerService = await createLoggerService()
       const context = {
         user: { id: '123', name: 'John' },
         metadata: { timestamp: Date.now(), ip: '127.0.0.1' },
@@ -177,12 +153,7 @@ describe('PinoLoggerService', () => {
 
   describe('error()', () => {
     it('should call pino error with message only', async () => {
-      process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test'
-
-      const { PinoLoggerService } =
-        await import('../../../../src/adapters/secondary/services/logger.service.js')
-
-      const loggerService = new PinoLoggerService()
+      const loggerService = await createLoggerService()
       loggerService.error('Test error message')
 
       expect(mockPinoLogger.error).toHaveBeenCalledWith({ err: undefined }, 'Test error message')
@@ -190,12 +161,7 @@ describe('PinoLoggerService', () => {
     })
 
     it('should call pino error with message and Error object', async () => {
-      process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test'
-
-      const { PinoLoggerService } =
-        await import('../../../../src/adapters/secondary/services/logger.service.js')
-
-      const loggerService = new PinoLoggerService()
+      const loggerService = await createLoggerService()
       const error = new Error('Something went wrong')
       loggerService.error('Error occurred', error)
 
@@ -204,12 +170,7 @@ describe('PinoLoggerService', () => {
     })
 
     it('should call pino error with message, Error object, and context', async () => {
-      process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test'
-
-      const { PinoLoggerService } =
-        await import('../../../../src/adapters/secondary/services/logger.service.js')
-
-      const loggerService = new PinoLoggerService()
+      const loggerService = await createLoggerService()
       const error = new Error('Database connection failed')
       const context = { userId: '123', operation: 'db_query' }
       loggerService.error('Database error', error, context)
@@ -222,12 +183,7 @@ describe('PinoLoggerService', () => {
     })
 
     it('should merge context with error object', async () => {
-      process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test'
-
-      const { PinoLoggerService } =
-        await import('../../../../src/adapters/secondary/services/logger.service.js')
-
-      const loggerService = new PinoLoggerService()
+      const loggerService = await createLoggerService()
       const error = new Error('Validation failed')
       const context = { field: 'email', value: 'invalid' }
       loggerService.error('Validation error', error, context)
@@ -239,12 +195,7 @@ describe('PinoLoggerService', () => {
     })
 
     it('should handle error without context', async () => {
-      process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test'
-
-      const { PinoLoggerService } =
-        await import('../../../../src/adapters/secondary/services/logger.service.js')
-
-      const loggerService = new PinoLoggerService()
+      const loggerService = await createLoggerService()
       const error = new Error('Network error')
       loggerService.error('Network failure', error, undefined)
 
@@ -252,12 +203,7 @@ describe('PinoLoggerService', () => {
     })
 
     it('should handle Error with stack trace', async () => {
-      process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test'
-
-      const { PinoLoggerService } =
-        await import('../../../../src/adapters/secondary/services/logger.service.js')
-
-      const loggerService = new PinoLoggerService()
+      const loggerService = await createLoggerService()
       const error = new Error('Stack trace test')
       error.stack = 'Error: Stack trace test\n  at test.ts:123:45'
       loggerService.error('Error with stack', error)
@@ -268,12 +214,7 @@ describe('PinoLoggerService', () => {
 
   describe('warn()', () => {
     it('should call pino warn with message only', async () => {
-      process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test'
-
-      const { PinoLoggerService } =
-        await import('../../../../src/adapters/secondary/services/logger.service.js')
-
-      const loggerService = new PinoLoggerService()
+      const loggerService = await createLoggerService()
       loggerService.warn('Test warning message')
 
       expect(mockPinoLogger.warn).toHaveBeenCalledWith(undefined, 'Test warning message')
@@ -281,12 +222,7 @@ describe('PinoLoggerService', () => {
     })
 
     it('should call pino warn with message and context', async () => {
-      process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test'
-
-      const { PinoLoggerService } =
-        await import('../../../../src/adapters/secondary/services/logger.service.js')
-
-      const loggerService = new PinoLoggerService()
+      const loggerService = await createLoggerService()
       const context = { retries: 3, endpoint: '/api/users' }
       loggerService.warn('Retry limit approaching', context)
 
@@ -295,24 +231,14 @@ describe('PinoLoggerService', () => {
     })
 
     it('should call pino warn with empty context object', async () => {
-      process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test'
-
-      const { PinoLoggerService } =
-        await import('../../../../src/adapters/secondary/services/logger.service.js')
-
-      const loggerService = new PinoLoggerService()
+      const loggerService = await createLoggerService()
       loggerService.warn('Warning message', {})
 
       expect(mockPinoLogger.warn).toHaveBeenCalledWith({}, 'Warning message')
     })
 
     it('should handle complex context objects', async () => {
-      process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test'
-
-      const { PinoLoggerService } =
-        await import('../../../../src/adapters/secondary/services/logger.service.js')
-
-      const loggerService = new PinoLoggerService()
+      const loggerService = await createLoggerService()
       const context = {
         performance: { responseTime: 5000, threshold: 3000 },
         request: { method: 'GET', path: '/api/slow' },
@@ -325,12 +251,7 @@ describe('PinoLoggerService', () => {
 
   describe('debug()', () => {
     it('should call pino debug with message only', async () => {
-      process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test'
-
-      const { PinoLoggerService } =
-        await import('../../../../src/adapters/secondary/services/logger.service.js')
-
-      const loggerService = new PinoLoggerService()
+      const loggerService = await createLoggerService()
       loggerService.debug('Test debug message')
 
       expect(mockPinoLogger.debug).toHaveBeenCalledWith(undefined, 'Test debug message')
@@ -338,12 +259,7 @@ describe('PinoLoggerService', () => {
     })
 
     it('should call pino debug with message and context', async () => {
-      process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test'
-
-      const { PinoLoggerService } =
-        await import('../../../../src/adapters/secondary/services/logger.service.js')
-
-      const loggerService = new PinoLoggerService()
+      const loggerService = await createLoggerService()
       const context = { query: 'SELECT * FROM users', executionTime: 15 }
       loggerService.debug('Database query executed', context)
 
@@ -352,24 +268,14 @@ describe('PinoLoggerService', () => {
     })
 
     it('should call pino debug with empty context object', async () => {
-      process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test'
-
-      const { PinoLoggerService } =
-        await import('../../../../src/adapters/secondary/services/logger.service.js')
-
-      const loggerService = new PinoLoggerService()
+      const loggerService = await createLoggerService()
       loggerService.debug('Debug message', {})
 
       expect(mockPinoLogger.debug).toHaveBeenCalledWith({}, 'Debug message')
     })
 
     it('should handle complex debugging context', async () => {
-      process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test'
-
-      const { PinoLoggerService } =
-        await import('../../../../src/adapters/secondary/services/logger.service.js')
-
-      const loggerService = new PinoLoggerService()
+      const loggerService = await createLoggerService()
       const context = {
         request: { headers: { 'user-agent': 'test' }, body: { test: true } },
         state: { step: 3, total: 10 },
@@ -383,12 +289,7 @@ describe('PinoLoggerService', () => {
 
   describe('Edge Cases', () => {
     it('should handle null context gracefully', async () => {
-      process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test'
-
-      const { PinoLoggerService } =
-        await import('../../../../src/adapters/secondary/services/logger.service.js')
-
-      const loggerService = new PinoLoggerService()
+      const loggerService = await createLoggerService()
       // @ts-expect-error Testing null handling
       loggerService.info('Test message', null)
 
@@ -396,24 +297,14 @@ describe('PinoLoggerService', () => {
     })
 
     it('should handle empty string message', async () => {
-      process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test'
-
-      const { PinoLoggerService } =
-        await import('../../../../src/adapters/secondary/services/logger.service.js')
-
-      const loggerService = new PinoLoggerService()
+      const loggerService = await createLoggerService()
       loggerService.info('')
 
       expect(mockPinoLogger.info).toHaveBeenCalledWith(undefined, '')
     })
 
     it('should handle very long messages', async () => {
-      process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test'
-
-      const { PinoLoggerService } =
-        await import('../../../../src/adapters/secondary/services/logger.service.js')
-
-      const loggerService = new PinoLoggerService()
+      const loggerService = await createLoggerService()
       const longMessage = 'A'.repeat(10000)
       loggerService.info(longMessage)
 
@@ -421,12 +312,7 @@ describe('PinoLoggerService', () => {
     })
 
     it('should handle special characters in messages', async () => {
-      process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test'
-
-      const { PinoLoggerService } =
-        await import('../../../../src/adapters/secondary/services/logger.service.js')
-
-      const loggerService = new PinoLoggerService()
+      const loggerService = await createLoggerService()
       const specialMessage = 'Test 🚀 with émojis and spëcial çharacters'
       loggerService.info(specialMessage)
 
@@ -434,12 +320,7 @@ describe('PinoLoggerService', () => {
     })
 
     it('should handle context with circular references', async () => {
-      process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test'
-
-      const { PinoLoggerService } =
-        await import('../../../../src/adapters/secondary/services/logger.service.js')
-
-      const loggerService = new PinoLoggerService()
+      const loggerService = await createLoggerService()
       const circular: any = { name: 'test' }
       circular.self = circular
 
@@ -452,12 +333,7 @@ describe('PinoLoggerService', () => {
     })
 
     it('should handle multiple consecutive log calls', async () => {
-      process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test'
-
-      const { PinoLoggerService } =
-        await import('../../../../src/adapters/secondary/services/logger.service.js')
-
-      const loggerService = new PinoLoggerService()
+      const loggerService = await createLoggerService()
 
       loggerService.info('Message 1')
       loggerService.warn('Message 2')
@@ -473,14 +349,8 @@ describe('PinoLoggerService', () => {
 
   describe('Log Levels', () => {
     it('should respect trace log level from environment', async () => {
-      process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test'
-      process.env.LOG_LEVEL = 'trace'
-
       const pino = (await import('pino')).default
-      const { PinoLoggerService } =
-        await import('../../../../src/adapters/secondary/services/logger.service.js')
-
-      new PinoLoggerService()
+      await createLoggerService('trace')
 
       expect(pino).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -490,14 +360,8 @@ describe('PinoLoggerService', () => {
     })
 
     it('should respect warn log level from environment', async () => {
-      process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test'
-      process.env.LOG_LEVEL = 'warn'
-
       const pino = (await import('pino')).default
-      const { PinoLoggerService } =
-        await import('../../../../src/adapters/secondary/services/logger.service.js')
-
-      new PinoLoggerService()
+      await createLoggerService('warn')
 
       expect(pino).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -507,14 +371,8 @@ describe('PinoLoggerService', () => {
     })
 
     it('should respect error log level from environment', async () => {
-      process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test'
-      process.env.LOG_LEVEL = 'error'
-
       const pino = (await import('pino')).default
-      const { PinoLoggerService } =
-        await import('../../../../src/adapters/secondary/services/logger.service.js')
-
-      new PinoLoggerService()
+      await createLoggerService('error')
 
       expect(pino).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -524,14 +382,8 @@ describe('PinoLoggerService', () => {
     })
 
     it('should respect silent log level from environment', async () => {
-      process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test'
-      process.env.LOG_LEVEL = 'silent'
-
       const pino = (await import('pino')).default
-      const { PinoLoggerService } =
-        await import('../../../../src/adapters/secondary/services/logger.service.js')
-
-      new PinoLoggerService()
+      await createLoggerService('silent')
 
       expect(pino).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -543,12 +395,7 @@ describe('PinoLoggerService', () => {
 
   describe('Type Safety', () => {
     it('should accept valid context types', async () => {
-      process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test'
-
-      const { PinoLoggerService } =
-        await import('../../../../src/adapters/secondary/services/logger.service.js')
-
-      const loggerService = new PinoLoggerService()
+      const loggerService = await createLoggerService()
 
       // These should all be valid context types
       loggerService.info('String context', { key: 'value' })
@@ -568,12 +415,7 @@ describe('PinoLoggerService', () => {
     })
 
     it('should return void from all logging methods', async () => {
-      process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test'
-
-      const { PinoLoggerService } =
-        await import('../../../../src/adapters/secondary/services/logger.service.js')
-
-      const loggerService = new PinoLoggerService()
+      const loggerService = await createLoggerService()
 
       const infoResult = loggerService.info('Test')
       const errorResult = loggerService.error('Test')
