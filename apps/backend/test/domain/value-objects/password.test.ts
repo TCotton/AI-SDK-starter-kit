@@ -2,7 +2,6 @@ import * as bcrypt from 'bcrypt'
 import { describe, expect, it } from 'vitest'
 
 import { Password } from '../../../src/domain/value-objects/password.js'
-import { ConflictException } from '../../../src/shared/exceptions/conflict.exception.js'
 import { ValidationException } from '../../../src/shared/exceptions/validation.exception.js'
 
 describe('Password', () => {
