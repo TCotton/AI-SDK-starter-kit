@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI } from '@google/generative-ai'
+import { GoogleGenerativeAI, type GenerativeModel } from '@google/generative-ai'
 import { EnvConfig } from '../config/env.config.js'
 import { obscured } from 'obscured'
 import path from 'node:path'
@@ -35,7 +35,7 @@ import { readFileSync } from 'node:fs'
 export class TokeniseGemini {
   private static instance: TokeniseGemini
   private ggenai: GoogleGenerativeAI
-  private model: any
+  private model: GenerativeModel
 
   private constructor() {
     this.ggenai = new GoogleGenerativeAI(
@@ -98,6 +98,6 @@ export class TokeniseGemini {
       contents: [{ role: 'user', parts: [{ text: input }] }],
     })
 
-    return totalTokens.length
+    return totalTokens
   }
 }
