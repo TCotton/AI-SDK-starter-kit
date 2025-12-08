@@ -1,0 +1,617 @@
+import { act, renderHook } from '@testing-library/react'
+import { describe, expect, it } from 'vitest'
+
+import { useRegistrationForm } from '@/view/hooks/useRegistrationForm.js'
+
+describe('useRegistrationForm', () => {
+  describe('Initial State', () => {
+    it('should initialize with empty form data', () => {
+      const { result } = renderHook(() => useRegistrationForm())
+
+      expect(result.current.formData).toEqual({
+        email: '',
+        name: '',
+        password: '',
+        confirmPassword: '',
+      })
+    })
+
+    it('should initialize with empty errors', () => {
+      const { result } = renderHook(() => useRegistrationForm())
+
+      expect(result.current.errors).toEqual({
+        email: '',
+        name: '',
+        password: '',
+        confirmPassword: '',
+      })
+    })
+
+    it('should provide all required handlers', () => {
+      const { result } = renderHook(() => useRegistrationForm())
+
+      expect(result.current.handleChange).toBeDefined()
+      expect(result.current.handleSubmit).toBeDefined()
+      expect(result.current.handleGoogleSignUp).toBeDefined()
+      expect(result.current.handleGitHubSignUp).toBeDefined()
+      expect(typeof result.current.handleChange).toBe('function')
+      expect(typeof result.current.handleSubmit).toBe('function')
+      expect(typeof result.current.handleGoogleSignUp).toBe('function')
+      expect(typeof result.current.handleGitHubSignUp).toBe('function')
+    })
+  })
+
+  describe('handleChange', () => {
+    it('should update email field', () => {
+      const { result } = renderHook(() => useRegistrationForm())
+
+      act(() => {
+        const handler = result.current.handleChange('email')
+        handler({ target: { value: 'test@example.com' } } as React.ChangeEvent<HTMLInputElement>)
+      })
+
+      expect(result.current.formData.email).toBe('test@example.com')
+    })
+
+    it('should update name field', () => {
+      const { result } = renderHook(() => useRegistrationForm())
+
+      act(() => {
+        const handler = result.current.handleChange('name')
+        handler({ target: { value: 'John Doe' } } as React.ChangeEvent<HTMLInputElement>)
+      })
+
+      expect(result.current.formData.name).toBe('John Doe')
+    })
+
+    it('should update password field', () => {
+      const { result } = renderHook(() => useRegistrationForm())
+
+      act(() => {
+        const handler = result.current.handleChange('password')
+        handler({ target: { value: 'securepassword123' } } as React.ChangeEvent<HTMLInputElement>)
+      })
+
+      expect(result.current.formData.password).toBe('securepassword123')
+    })
+
+    it('should update confirmPassword field', () => {
+      const { result } = renderHook(() => useRegistrationForm())
+
+      act(() => {
+        const handler = result.current.handleChange('confirmPassword')
+        handler({
+          target: { value: 'securepassword123' },
+        } as React.ChangeEvent<HTMLInputElement>)
+      })
+
+      expect(result.current.formData.confirmPassword).toBe('securepassword123')
+    })
+
+    it('should clear error for the field being changed', () => {
+      const { result } = renderHook(() => useRegistrationForm())
+
+      // First, trigger validation to create errors
+      act(() => {
+        result.current.handleSubmit({
+          preventDefault: () => {},
+        } as React.FormEvent)
+      })
+
+      expect(result.current.errors.email).toBe('Email is required')
+
+      // Then change the field
+      act(() => {
+        const handler = result.current.handleChange('email')
+        handler({ target: { value: 'test@example.com' } } as React.ChangeEvent<HTMLInputElement>)
+      })
+
+      expect(result.current.errors.email).toBe('')
+    })
+
+    it('should not clear errors for other fields', () => {
+      const { result } = renderHook(() => useRegistrationForm())
+
+      // Trigger validation
+      act(() => {
+        result.current.handleSubmit({
+          preventDefault: () => {},
+        } as React.FormEvent)
+      })
+
+      const initialNameError = result.current.errors.name
+
+      // Change only email
+      act(() => {
+        const handler = result.current.handleChange('email')
+        handler({ target: { value: 'test@example.com' } } as React.ChangeEvent<HTMLInputElement>)
+      })
+
+      expect(result.current.errors.name).toBe(initialNameError)
+    })
+  })
+
+  describe('Form Validation - Email', () => {
+    it('should show error when email is empty', () => {
+      const { result } = renderHook(() => useRegistrationForm())
+
+      act(() => {
+        result.current.handleSubmit({
+          preventDefault: () => {},
+        } as React.FormEvent)
+      })
+
+      expect(result.current.errors.email).toBe('Email is required')
+    })
+
+    it('should show error for invalid email format', () => {
+      const { result } = renderHook(() => useRegistrationForm())
+
+      act(() => {
+        const handler = result.current.handleChange('email')
+        handler({ target: { value: 'invalid-email' } } as React.ChangeEvent<HTMLInputElement>)
+      })
+
+      act(() => {
+        result.current.handleSubmit({
+          preventDefault: () => {},
+        } as React.FormEvent)
+      })
+
+      expect(result.current.errors.email).toBe('Please enter a valid email address')
+    })
+
+    it('should accept valid email', () => {
+      const { result } = renderHook(() => useRegistrationForm())
+
+      act(() => {
+        const emailHandler = result.current.handleChange('email')
+        emailHandler({
+          target: { value: 'valid@example.com' },
+        } as React.ChangeEvent<HTMLInputElement>)
+      })
+
+      act(() => {
+        const nameHandler = result.current.handleChange('name')
+        nameHandler({ target: { value: 'John Doe' } } as React.ChangeEvent<HTMLInputElement>)
+      })
+
+      act(() => {
+        const passwordHandler = result.current.handleChange('password')
+        passwordHandler({
+          target: { value: 'securepassword123' },
+        } as React.ChangeEvent<HTMLInputElement>)
+      })
+
+      act(() => {
+        const confirmHandler = result.current.handleChange('confirmPassword')
+        confirmHandler({
+          target: { value: 'securepassword123' },
+        } as React.ChangeEvent<HTMLInputElement>)
+      })
+
+      act(() => {
+        result.current.handleSubmit({
+          preventDefault: () => {},
+        } as React.FormEvent)
+      })
+
+      expect(result.current.errors.email).toBe('')
+    })
+  })
+
+  describe('Form Validation - Name', () => {
+    it('should show error when name is empty', () => {
+      const { result } = renderHook(() => useRegistrationForm())
+
+      act(() => {
+        result.current.handleSubmit({
+          preventDefault: () => {},
+        } as React.FormEvent)
+      })
+
+      expect(result.current.errors.name).toBeTruthy()
+    })
+
+    it('should accept valid name', () => {
+      const { result } = renderHook(() => useRegistrationForm())
+
+      act(() => {
+        const emailHandler = result.current.handleChange('email')
+        emailHandler({
+          target: { value: 'test@example.com' },
+        } as React.ChangeEvent<HTMLInputElement>)
+      })
+
+      act(() => {
+        const nameHandler = result.current.handleChange('name')
+        nameHandler({ target: { value: 'John Doe' } } as React.ChangeEvent<HTMLInputElement>)
+      })
+
+      act(() => {
+        const passwordHandler = result.current.handleChange('password')
+        passwordHandler({
+          target: { value: 'securepassword123' },
+        } as React.ChangeEvent<HTMLInputElement>)
+      })
+
+      act(() => {
+        const confirmHandler = result.current.handleChange('confirmPassword')
+        confirmHandler({
+          target: { value: 'securepassword123' },
+        } as React.ChangeEvent<HTMLInputElement>)
+      })
+
+      act(() => {
+        result.current.handleSubmit({
+          preventDefault: () => {},
+        } as React.FormEvent)
+      })
+
+      expect(result.current.errors.name).toBe('')
+    })
+  })
+
+  describe('Form Validation - Password', () => {
+    it('should show error when password is empty', () => {
+      const { result } = renderHook(() => useRegistrationForm())
+
+      act(() => {
+        result.current.handleSubmit({
+          preventDefault: () => {},
+        } as React.FormEvent)
+      })
+
+      expect(result.current.errors.password).toBe('Password is required')
+    })
+
+    it('should show error when password is less than 12 characters', () => {
+      const { result } = renderHook(() => useRegistrationForm())
+
+      act(() => {
+        const handler = result.current.handleChange('password')
+        handler({ target: { value: 'short' } } as React.ChangeEvent<HTMLInputElement>)
+      })
+
+      act(() => {
+        result.current.handleSubmit({
+          preventDefault: () => {},
+        } as React.FormEvent)
+      })
+
+      expect(result.current.errors.password).toBe('Password must be at least 12 characters')
+    })
+
+    it('should accept password with 12 or more characters', () => {
+      const { result } = renderHook(() => useRegistrationForm())
+
+      act(() => {
+        const emailHandler = result.current.handleChange('email')
+        emailHandler({
+          target: { value: 'test@example.com' },
+        } as React.ChangeEvent<HTMLInputElement>)
+      })
+
+      act(() => {
+        const nameHandler = result.current.handleChange('name')
+        nameHandler({ target: { value: 'John Doe' } } as React.ChangeEvent<HTMLInputElement>)
+      })
+
+      act(() => {
+        const passwordHandler = result.current.handleChange('password')
+        passwordHandler({
+          target: { value: 'securepassword123' },
+        } as React.ChangeEvent<HTMLInputElement>)
+      })
+
+      act(() => {
+        const confirmHandler = result.current.handleChange('confirmPassword')
+        confirmHandler({
+          target: { value: 'securepassword123' },
+        } as React.ChangeEvent<HTMLInputElement>)
+      })
+
+      act(() => {
+        result.current.handleSubmit({
+          preventDefault: () => {},
+        } as React.FormEvent)
+      })
+
+      expect(result.current.errors.password).toBe('')
+    })
+  })
+
+  describe('Form Validation - Confirm Password', () => {
+    it('should show error when confirm password is empty', () => {
+      const { result } = renderHook(() => useRegistrationForm())
+
+      act(() => {
+        const passwordHandler = result.current.handleChange('password')
+        passwordHandler({
+          target: { value: 'securepassword123' },
+        } as React.ChangeEvent<HTMLInputElement>)
+      })
+
+      act(() => {
+        result.current.handleSubmit({
+          preventDefault: () => {},
+        } as React.FormEvent)
+      })
+
+      expect(result.current.errors.confirmPassword).toBe('Please confirm your password')
+    })
+
+    it('should show error when passwords do not match', () => {
+      const { result } = renderHook(() => useRegistrationForm())
+
+      act(() => {
+        const passwordHandler = result.current.handleChange('password')
+        passwordHandler({
+          target: { value: 'securepassword123' },
+        } as React.ChangeEvent<HTMLInputElement>)
+
+        const confirmHandler = result.current.handleChange('confirmPassword')
+        confirmHandler({
+          target: { value: 'differentpassword' },
+        } as React.ChangeEvent<HTMLInputElement>)
+      })
+
+      act(() => {
+        result.current.handleSubmit({
+          preventDefault: () => {},
+        } as React.FormEvent)
+      })
+
+      expect(result.current.errors.confirmPassword).toBe('Passwords do not match')
+    })
+
+    it('should not show error when passwords match', () => {
+      const { result } = renderHook(() => useRegistrationForm())
+
+      act(() => {
+        const emailHandler = result.current.handleChange('email')
+        emailHandler({
+          target: { value: 'test@example.com' },
+        } as React.ChangeEvent<HTMLInputElement>)
+      })
+
+      act(() => {
+        const nameHandler = result.current.handleChange('name')
+        nameHandler({ target: { value: 'John Doe' } } as React.ChangeEvent<HTMLInputElement>)
+      })
+
+      act(() => {
+        const passwordHandler = result.current.handleChange('password')
+        passwordHandler({
+          target: { value: 'securepassword123' },
+        } as React.ChangeEvent<HTMLInputElement>)
+      })
+
+      act(() => {
+        const confirmHandler = result.current.handleChange('confirmPassword')
+        confirmHandler({
+          target: { value: 'securepassword123' },
+        } as React.ChangeEvent<HTMLInputElement>)
+      })
+
+      act(() => {
+        result.current.handleSubmit({
+          preventDefault: () => {},
+        } as React.FormEvent)
+      })
+
+      expect(result.current.errors.confirmPassword).toBe('')
+    })
+  })
+
+  describe('handleSubmit', () => {
+    it('should prevent default form submission', () => {
+      const { result } = renderHook(() => useRegistrationForm())
+      let defaultPrevented = false
+
+      act(() => {
+        result.current.handleSubmit({
+          preventDefault: () => {
+            defaultPrevented = true
+          },
+        } as React.FormEvent)
+      })
+
+      expect(defaultPrevented).toBe(true)
+    })
+
+    it('should validate form on submission', () => {
+      const { result } = renderHook(() => useRegistrationForm())
+
+      act(() => {
+        result.current.handleSubmit({
+          preventDefault: () => {},
+        } as React.FormEvent)
+      })
+
+      expect(result.current.errors.email).toBeTruthy()
+      expect(result.current.errors.name).toBeTruthy()
+      expect(result.current.errors.password).toBeTruthy()
+      expect(result.current.errors.confirmPassword).toBeTruthy()
+    })
+
+    it('should not submit when validation fails', () => {
+      const { result } = renderHook(() => useRegistrationForm())
+
+      act(() => {
+        result.current.handleSubmit({
+          preventDefault: () => {},
+        } as React.FormEvent)
+      })
+
+      // Validation should fail and set errors
+      expect(Object.values(result.current.errors).some((error) => error !== '')).toBe(true)
+    })
+
+    it('should clear all errors when form is valid', () => {
+      const { result } = renderHook(() => useRegistrationForm())
+
+      act(() => {
+        const emailHandler = result.current.handleChange('email')
+        emailHandler({
+          target: { value: 'test@example.com' },
+        } as React.ChangeEvent<HTMLInputElement>)
+      })
+
+      act(() => {
+        const nameHandler = result.current.handleChange('name')
+        nameHandler({ target: { value: 'John Doe' } } as React.ChangeEvent<HTMLInputElement>)
+      })
+
+      act(() => {
+        const passwordHandler = result.current.handleChange('password')
+        passwordHandler({
+          target: { value: 'securepassword123' },
+        } as React.ChangeEvent<HTMLInputElement>)
+      })
+
+      act(() => {
+        const confirmHandler = result.current.handleChange('confirmPassword')
+        confirmHandler({
+          target: { value: 'securepassword123' },
+        } as React.ChangeEvent<HTMLInputElement>)
+      })
+
+      act(() => {
+        result.current.handleSubmit({
+          preventDefault: () => {},
+        } as React.FormEvent)
+      })
+
+      expect(result.current.errors.email).toBe('')
+      expect(result.current.errors.name).toBe('')
+      expect(result.current.errors.password).toBe('')
+      expect(result.current.errors.confirmPassword).toBe('')
+    })
+  })
+
+  describe('OAuth Handlers', () => {
+    it('should provide handleGoogleSignUp without errors', () => {
+      const { result } = renderHook(() => useRegistrationForm())
+
+      expect(() => {
+        act(() => {
+          result.current.handleGoogleSignUp()
+        })
+      }).not.toThrow()
+    })
+
+    it('should provide handleGitHubSignUp without errors', () => {
+      const { result } = renderHook(() => useRegistrationForm())
+
+      expect(() => {
+        act(() => {
+          result.current.handleGitHubSignUp()
+        })
+      }).not.toThrow()
+    })
+  })
+
+  describe('Complex Scenarios', () => {
+    it('should handle multiple field updates in sequence', () => {
+      const { result } = renderHook(() => useRegistrationForm())
+
+      act(() => {
+        const emailHandler = result.current.handleChange('email')
+        emailHandler({
+          target: { value: 'first@example.com' },
+        } as React.ChangeEvent<HTMLInputElement>)
+      })
+
+      expect(result.current.formData.email).toBe('first@example.com')
+
+      act(() => {
+        const emailHandler = result.current.handleChange('email')
+        emailHandler({
+          target: { value: 'second@example.com' },
+        } as React.ChangeEvent<HTMLInputElement>)
+      })
+
+      expect(result.current.formData.email).toBe('second@example.com')
+    })
+
+    it('should maintain other field values when updating one field', () => {
+      const { result } = renderHook(() => useRegistrationForm())
+
+      act(() => {
+        const emailHandler = result.current.handleChange('email')
+        emailHandler({
+          target: { value: 'test@example.com' },
+        } as React.ChangeEvent<HTMLInputElement>)
+      })
+
+      act(() => {
+        const nameHandler = result.current.handleChange('name')
+        nameHandler({ target: { value: 'John Doe' } } as React.ChangeEvent<HTMLInputElement>)
+      })
+
+      act(() => {
+        const passwordHandler = result.current.handleChange('password')
+        passwordHandler({
+          target: { value: 'securepassword123' },
+        } as React.ChangeEvent<HTMLInputElement>)
+      })
+
+      expect(result.current.formData.email).toBe('test@example.com')
+      expect(result.current.formData.name).toBe('John Doe')
+      expect(result.current.formData.password).toBe('securepassword123')
+    })
+
+    it('should handle validation -> correction -> revalidation flow', () => {
+      const { result } = renderHook(() => useRegistrationForm())
+
+      // First submission with errors
+      act(() => {
+        result.current.handleSubmit({
+          preventDefault: () => {},
+        } as React.FormEvent)
+      })
+
+      expect(result.current.errors.email).toBeTruthy()
+
+      // Correct the errors
+      act(() => {
+        const emailHandler = result.current.handleChange('email')
+        emailHandler({
+          target: { value: 'test@example.com' },
+        } as React.ChangeEvent<HTMLInputElement>)
+      })
+
+      act(() => {
+        const nameHandler = result.current.handleChange('name')
+        nameHandler({ target: { value: 'John Doe' } } as React.ChangeEvent<HTMLInputElement>)
+      })
+
+      act(() => {
+        const passwordHandler = result.current.handleChange('password')
+        passwordHandler({
+          target: { value: 'securepassword123' },
+        } as React.ChangeEvent<HTMLInputElement>)
+      })
+
+      act(() => {
+        const confirmHandler = result.current.handleChange('confirmPassword')
+        confirmHandler({
+          target: { value: 'securepassword123' },
+        } as React.ChangeEvent<HTMLInputElement>)
+      })
+
+      // Revalidate
+      act(() => {
+        result.current.handleSubmit({
+          preventDefault: () => {},
+        } as React.FormEvent)
+      })
+
+      expect(result.current.errors.email).toBe('')
+      expect(result.current.errors.name).toBe('')
+      expect(result.current.errors.password).toBe('')
+      expect(result.current.errors.confirmPassword).toBe('')
+    })
+  })
+})

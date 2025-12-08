@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { fileToDataURL } from '../application/services/fileToDataURL.js'
+import { fileToDataURL } from '@/application/services/fileToDataURL.js'
 
 describe('fileToDataURL', () => {
   it('should reject when no file is provided', async () => {

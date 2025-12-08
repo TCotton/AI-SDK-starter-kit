@@ -1,0 +1,25 @@
+'use client'
+
+import { RegistrationForm } from '@/view/components/RegistrationForm.js'
+import { useRegistrationForm } from '@/view/hooks/useRegistrationForm.js'
+
+/**
+ * Registration page following DDD architecture.
+ * This page is minimal and declarative - it only orchestrates the hook and component.
+ * Business logic is in the hook, presentation is in the component.
+ */
+export default function RegistrationPage() {
+  const { errors, formData, handleChange, handleGitHubSignUp, handleGoogleSignUp, handleSubmit } =
+    useRegistrationForm()
+
+  return (
+    <RegistrationForm
+      formData={formData}
+      errors={errors}
+      onFieldChange={handleChange}
+      onSubmit={handleSubmit}
+      onGoogleSignUp={handleGoogleSignUp}
+      onGitHubSignUp={handleGitHubSignUp}
+    />
+  )
+}
