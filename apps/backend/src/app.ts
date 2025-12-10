@@ -54,8 +54,10 @@ export function buildApp(options?: FastifyServerOptions): FastifyInstance {
   fastify.get('/ai', async (request, _reply) => {
     const { GET } = await import('./ai-persistance.js')
     const chat = await GET(request)
-    return new Request(`https://localhost${request.url}?chat=${chat}`, {
-      method: 'GET',
+    return new Response(JSON.stringify(chat), {
+      headers: {
+        'Content-Type': 'application/json',
+      },
     })
   })
 

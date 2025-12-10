@@ -91,4 +91,7 @@ export class RequestUtil {
       })
     }
   }
+  static createResponse(body: unknown, status: number = 200): Response {
+    return new Response(JSON.stringify(body), { status })
+  }
 }

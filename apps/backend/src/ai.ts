@@ -20,7 +20,9 @@ function processUserUUID(userInput: string | Buffer) {
   return uuidVersionValidation(userInput)
 }
 
-export const GET = async (req: Request): Promise<Response> => {
+export const GET = async (
+  req: Request
+): Promise<Response | { id: string; messages: UIMessage[] }> => {
   const url = new URL(req.url)
   const chatId = url.searchParams.get('id')
   if (!chatId) {
@@ -29,13 +31,7 @@ export const GET = async (req: Request): Promise<Response> => {
   if (processUserUUID(chatId) !== 'v7') {
     return new Response('Invalid chatId provided', { status: 400 })
   }
-  const chat = { id: chatId, messages: [] as UIMessage[] }
-
-  return new Response(JSON.stringify(chat), {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
+  return { id: chatId, messages: [] as UIMessage[] }
 }
 
 export const POST = async (req: Request): Promise<Response> => {
