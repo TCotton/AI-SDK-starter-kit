@@ -38,9 +38,31 @@ export const GET = async (req: FastifyRequest): Promise<Response> => {
 }
 
 export const POST = async (req: Request): Promise<Response> => {
-  const body = (await req.json()) as { messages: UIMessage[]; id: string }
-
-  const { messages, id } = body
+  const UIMessageSchema = z.object({
+    id: z.string().optional(),
+    role: z.string(),
+    content: z.string(),
+    name: z.string().optional(),
+    parts: z.array(z.any()).optional(),
+    // Add other fields as needed based on UIMessage definition
+  })
+  const RequestBodySchema = z.object({
+    messages: z.array(UIMessageSchema),
+    id: z.string(),
+  })
+  let parsed
+  try {
+    parsed = RequestBodySchema.parse(await req.json())
+  } catch (e) {
+    return new Response(
+      JSON.stringify({
+        error: 'Invalid request body',
+        details: e instanceof z.ZodError ? e.issues : e,
+      }),
+      { status: 400, headers: { 'Content-Type': 'application/json' } }
+    )
+  }
+  const { messages, id } = parsed
 
   let chat = await getChat(id)
   const mostRecentMessage = messages[messages.length - 1]
@@ -56,19 +78,17 @@ export const POST = async (req: Request): Promise<Response> => {
   }
 
   if (!chat) {
-    const newChat = await createChat(id, messages)
+    const newChat = await createChat(id, messages as UIMessage[])
     chat = newChat
   } else {
-    await appendToChatMessages(id, [mostRecentMessage])
+    await appendToChatMessages(id, [mostRecentMessage as UIMessage])
   }
 
-  const SYSTEM_PROMPT = `You must respond in the same style of Charles Marlow the narrator in 
-  Joseph Conrad's The Heart of Darkness novella. Only answer factual questions about the 
-  novella when using the heartOfDarknessQA tool. Do not use other sources.`
+  const SYSTEM_PROMPT = `You must respond in the same style of Charles Marlow the narrator in Joseph Conrad's The Heart of Darkness novella. Only answer factual questions about the novella when using the heartOfDarknessQA tool. Do not use other sources.`
 
   const result = streamText({
     model: google('gemini-2.0-flash-001'),
-    messages: convertToModelMessages(messages),
+    messages: convertToModelMessages(messages as UIMessage[]),
     system: ` ${SYSTEM_PROMPT}
       You have access to the following tools:
       - heartOfDarknessQA (for answering questions about the novella Heart of Darkness)
@@ -145,7 +165,7 @@ export const POST = async (req: Request): Promise<Response> => {
   })
 
   return result.toUIMessageStreamResponse({
-    originalMessages: messages,
+    originalMessages: messages as UIMessage[],
     onFinish: async ({ responseMessage }) => {
       // 'messages' is the full message history, including the original messages
       // Includes original user message and assistant's response with all parts
